@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour {
 
     private Animator animator;
 
+    public bool canMove = true;
+
     void Start() {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
@@ -22,7 +24,7 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        if (movementInput != Vector2.zero) {
+        if (canMove && movementInput != Vector2.zero) {
 
             rb.MovePosition(rb.position + (speed * Time.fixedDeltaTime * movementInput));
 
