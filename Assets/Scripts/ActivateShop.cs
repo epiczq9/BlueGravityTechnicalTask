@@ -6,12 +6,14 @@ public class ActivateShop : MonoBehaviour
 {
 
     public bool isInShopTrigger = false;
-    public GameObject shopPopup;
+    public GameObject shopPopupUI;
     private bool shoppingUIActive = false;
 
     public bool isShopping = false;
 
     PlayerMovement playerMovementScript;
+
+    public GameObject shopInteractInstruction;
 
     void Start() {
         playerMovementScript = GetComponent<PlayerMovement>();
@@ -36,18 +38,22 @@ public class ActivateShop : MonoBehaviour
         playerMovementScript.canMove = !shoppingUIActive;
 
         //shopPopup and shoppingUIActive are flags for the whole shopping menu
-        shopPopup.SetActive(shoppingUIActive);
+        shopPopupUI.SetActive(shoppingUIActive);
+
+        shopInteractInstruction.SetActive(!shoppingUIActive);
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.CompareTag("ShopTrigger")) {
             isInShopTrigger = true;
+            shopInteractInstruction.SetActive(true);
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision) {
         if (collision.CompareTag("ShopTrigger")) {
             isInShopTrigger = false;
+            shopInteractInstruction.SetActive(false);
         }
     }
 }

@@ -33,6 +33,12 @@ public class ClothesAnimation : MonoBehaviour
 
     }*/
 
+    public void InitialSetup(float moveX, float moveY, bool isPlayerMoving) {
+        clothesAnimator.SetFloat("moveX", moveX);
+        clothesAnimator.SetFloat("moveY", moveY);
+        clothesAnimator.SetBool("isMoving", isPlayerMoving);
+    }
+
     public void SetMovingAnimationParamaters(float moveX, float moveY) {
         clothesAnimator.SetFloat("moveX", moveX);
         clothesAnimator.SetFloat("moveY", moveY);
