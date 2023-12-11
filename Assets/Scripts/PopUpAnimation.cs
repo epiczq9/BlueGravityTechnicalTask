@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class PopUpAnimation : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    Renderer rend1;
+    Renderer rend2;
+
+    private void Start() {
+        rend1 = transform.GetChild(0).GetComponent<Renderer>();
+        rend2 = transform.GetChild(1).GetComponent<Renderer>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void TurnOffRenderer() {
+        rend2.enabled = false;
+    }
+    public void TurnOnRenderer() {
+        rend1.enabled = true;
+        rend2.enabled = true;
     }
 }
