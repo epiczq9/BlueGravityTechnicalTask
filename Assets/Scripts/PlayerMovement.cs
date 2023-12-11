@@ -12,29 +12,46 @@ public class PlayerMovement : MonoBehaviour {
     private Animator animator;
 
     public bool canMove = true;
+    bool isMoving = false;
+
+    public ClothesAnimation hatAnimationScript;
+    //public ClothesAnimation shirtAnimationScript;
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        hatAnimationScript = transform.GetChild(0).gameObject.GetComponent<ClothesAnimation>();
+        //shirtAnimationScript = transform.GetChild(1).gameObject.GetComponent<ClothesAnimation>();
     }
 
     private void Update() {
         movementInput.x = Input.GetAxisRaw("Horizontal");
         movementInput.y = Input.GetAxisRaw("Vertical");
+        
     }
 
     void FixedUpdate() {
         if (canMove && movementInput != Vector2.zero) {
 
+            isMoving = true;
+
             rb.MovePosition(rb.position + (speed * Time.fixedDeltaTime * movementInput));
 
-            animator.SetBool("isMoving", true);
+            animator.SetBool("isMoving", isMoving);
+            hatAnimationScript.SetIsMovingAnimation(isMoving);
+
 
             animator.SetFloat("moveX", movementInput.x);
             animator.SetFloat("moveY", movementInput.y);
+            hatAnimationScript.SetMovingAnimationParamaters(movementInput.x, movementInput.y);
 
         } else {
-            animator.SetBool("isMoving", false);
+            isMoving = false;
+            animator.SetBool("isMoving", isMoving);
+            hatAnimationScript.SetIsMovingAnimation(isMoving);
         }
+
+        
+        
     }
 }
