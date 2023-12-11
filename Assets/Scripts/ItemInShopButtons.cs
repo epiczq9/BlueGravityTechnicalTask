@@ -16,8 +16,12 @@ public class ItemInShopButtons : MonoBehaviour
     public Item itemData;
     public ShoppingManager shoppingManager;
     public InventoryManager inventoryManager;
+    public AudioManager audioManager;
+    public Animator popUpAnimator;
+
     void Start() {
         SetupItemInShopButtons();
+        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
     }
 
     public void SetupItemInShopButtons() {
@@ -36,17 +40,21 @@ public class ItemInShopButtons : MonoBehaviour
         //print("You've bought " + itemName.text);
         isOwned = true;
         gameObject.SetActive(false);
-        shoppingManager.BuyItem(itemData);
+        audioManager.PlaySelectSFX();
+        shoppingManager.BuyItem(itemData);  //With this we call a function in the ShoppingManager script which does broader thing than this function for the button
         inventoryManager.UpdateInventory();
     }
 
     public void SellItem() {
         if (itemData.isEquipped) {
-            print("Cant sell");
+            print("Cant sell, have to unequip");
+            audioManager.PlayErrorSFX();
+            popUpAnimator.Play("PopUp");
         } else {
             isOwned = false;
             gameObject.SetActive(false);
-            shoppingManager.SellItem(itemData);
+            audioManager.PlaySelectSFX();
+            shoppingManager.SellItem(itemData); //With this we call a function in the ShoppingManager script which does broader thing than this function for the button
             inventoryManager.UpdateInventory();
         }
         

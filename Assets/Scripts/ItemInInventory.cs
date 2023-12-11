@@ -15,6 +15,7 @@ public class ItemInInventory : MonoBehaviour
     public Item itemData;
     public ShoppingManager shoppingManager;
     public GameObject unequipButton;
+    public AudioManager audioManager;
 
     public PlayerMovement playerScript;
 
@@ -23,9 +24,12 @@ public class ItemInInventory : MonoBehaviour
     public GameObject[] hatButtons;
     public GameObject[] shirtButtons;
 
+    
+
     void Start() {
         SetupItemInShopButtons();
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
     }
 
     public void SetupItemInShopButtons() {
@@ -60,26 +64,27 @@ public class ItemInInventory : MonoBehaviour
         }*/
     }
 
-    public void LockButton() {
-        gameObject.GetComponent<Button>().interactable = false;
-    }
-
     public void EquipItem() {
         if (itemType.text == "hat") {
-            if(playerScript.equippedHat != null && playerScript.equippedHat != itemObject) {
+
+            if (playerScript.equippedHat != null && playerScript.equippedHat != itemObject) {
                 playerScript.equippedHat.SetActive(false);
                 playerScript.equippedHat.GetComponent<ItemWithAnimationData>().itemData.isEquipped = false;
                 playerScript.equippedHat = null;
 
             }
+
             print("HAT EQUIP");
             itemObject.SetActive(true);
+            audioManager.PlayEquipSFX();
             playerScript.EquipHatOnPlayer(itemObject);
             itemObject.GetComponent<ItemWithAnimationData>().itemData.isEquipped = true;
             isEquipped = true;
         } else if (itemType.text == "shirt" && playerScript.equippedShirt == null) {
+
             print("SHIRT EQUIP");
             itemObject.SetActive(true);
+            audioManager.PlayEquipSFX();
             playerScript.EquipShirtOnPlayer(itemObject);
             itemObject.GetComponent<ItemWithAnimationData>().itemData.isEquipped = true;
             isEquipped = true;
@@ -92,22 +97,29 @@ public class ItemInInventory : MonoBehaviour
                 hatButton.GetComponent<Button>().interactable = true;
             }
         }
+
         if (itemType.text == "shirt") {
             foreach (GameObject shirtButton in shirtButtons) {
                 shirtButton.GetComponent<Button>().interactable = true;
             }
         }
+
         if (itemType.text == "hat") {
+
             print("HAT UNEQUIP");
             itemObject.SetActive(false);
+            audioManager.PlayUnequipSFX();
             playerScript.UnequipHatFromPlayer();
             itemObject.GetComponent<ItemWithAnimationData>().itemData.isEquipped = false;
             isEquipped = false;
             gameObject.GetComponent<Button>().interactable = true;
             unequipButton.SetActive(false);
+
         } else if (itemType.text == "shirt") {
+
             print("SHIRT UNEQUIP");
             itemObject.SetActive(false);
+            audioManager.PlayUnequipSFX();
             playerScript.UnequipShirtFromPlayer();
             itemObject.GetComponent<ItemWithAnimationData>().itemData.isEquipped = false;
             isEquipped = false;

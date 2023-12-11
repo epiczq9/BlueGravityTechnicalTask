@@ -23,10 +23,15 @@ public class PlayerMovement : MonoBehaviour {
     public List<GameObject> clothesList = new();
 
     void Start() {
+
+        //The idea of this function is to equip clothes on startup that were still equipped when the player exited the game
+        //but I was thinking it's better to reset everything, but I will leabe this here, if I wanted to save the progress
+
+        //CheckEquippedClothes();
+
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        //hatAnimationScript = transform.GetChild(0).gameObject.GetComponent<ClothesAnimation>();
-        //shirtAnimationScript = transform.GetChild(1).gameObject.GetComponent<ClothesAnimation>();
+
         SetupEquipedClothesAnimation();
     }
 
@@ -36,15 +41,11 @@ public class PlayerMovement : MonoBehaviour {
         
     }
 
+
     void FixedUpdate() {
+
         SetHatAnimationFloats();
         SetShirtAnimationFloats();
-
-        /*if (hatAnimationScript != null && shirtAnimationScript != null) {
-            hatAnimationScript.SetMovingAnimationParamaters(animator.GetFloat("moveX"), animator.GetFloat("moveY"));
-            shirtAnimationScript.SetMovingAnimationParamaters(animator.GetFloat("moveX"), animator.GetFloat("moveY"));
-
-        }*/
 
         if (canMove && movementInput != Vector2.zero) {
 
@@ -55,25 +56,38 @@ public class PlayerMovement : MonoBehaviour {
             animator.SetBool("isMoving", isMoving);
             SetHatIsMoving();
             SetShirtIsMoving();
-            /*hatAnimationScript.SetIsMovingAnimation(isMoving);
-            shirtAnimationScript.SetIsMovingAnimation(isMoving);*/
 
 
             animator.SetFloat("moveX", movementInput.x);
-            animator.SetFloat("moveY", movementInput.y);/*
-            hatAnimationScript.SetMovingAnimationParamaters(movementInput.x, movementInput.y);
-            shirtAnimationScript.SetMovingAnimationParamaters(movementInput.x, movementInput.y);*/
+            animator.SetFloat("moveY", movementInput.y);
 
         } else {
             isMoving = false;
             animator.SetBool("isMoving", isMoving);
             SetHatIsMoving();
             SetShirtIsMoving();
-            /*hatAnimationScript.SetIsMovingAnimation(isMoving);
-            shirtAnimationScript.SetIsMovingAnimation(isMoving);*/
         }
     }
 
+
+    //The idea of this function is to equip clothes that were equipped when the player exited the game
+    //but I was thinking it's better to reset everything, but I will leabe this here, if I wanted to save the progress
+    void CheckEquippedClothes() {
+        foreach(GameObject clothesItem in clothesList) {
+            Item clothesData = clothesItem.GetComponent<ItemWithAnimationData>().itemData;
+            if (clothesData.isEquipped) {
+                clothesItem.SetActive(true);
+                if (clothesData.itemType == Item.ItemType.hat) {
+                    EquipHatOnPlayer(clothesItem);
+                } else if (clothesData.itemType == Item.ItemType.shirt) {
+                    EquipShirtOnPlayer(clothesItem);
+                }
+                SetupEquipedClothesAnimation();
+            } else {
+                clothesItem.SetActive(false);
+            }
+        }
+    }
     void SetHatAnimationFloats() {
         if (hatAnimationScript != null) {
             hatAnimationScript.SetMovingAnimationParamaters(animator.GetFloat("moveX"), animator.GetFloat("moveY"));
@@ -118,66 +132,6 @@ public class PlayerMovement : MonoBehaviour {
         shirtAnimationScript = null;
     }
 
-
-
-    //This function is called AFTER we check if the item is already equipped in ItemInInventory script
-    /*public void EquipHat(Item itemData) {
-        if (equippedHat != null) {
-            UnequipHat(equippedHat.GetComponent<ItemWithAnimationData>().itemData);
-        }
-
-        foreach (GameObject clothesItem in clothesList) {
-            if (clothesItem.GetComponent<ItemWithAnimationData>().itemData.itemName == itemData.itemName) {
-                equippedHat = clothesItem;
-                SetupEquipedClothesAnimation();
-                clothesItem.SetActive(true);
-                break;
-            }
-
-        }
-    }
-
-    public void UnequipHat(Item itemData) {
-        if (equippedHat != null) {
-            foreach (GameObject clothesItem in clothesList) {
-                if (clothesItem.GetComponent<ItemWithAnimationData>().itemData.itemName == itemData.itemName) {
-                    equippedHat = null;
-                    hatAnimationScript = null;
-                    clothesItem.SetActive(false);
-                    break;
-                }
-            }
-        }
-    }
-
-    public void EquipShirt(Item itemData) {
-        if (equippedShirt != null) {
-            UnequipHat(equippedShirt.GetComponent<ItemWithAnimationData>().itemData);
-        }
-
-        foreach (GameObject clothesItem in clothesList) {
-            if (clothesItem.GetComponent<ItemWithAnimationData>().itemData.itemName == itemData.itemName) {
-                equippedShirt = clothesItem;
-                SetupEquipedClothesAnimation();
-                clothesItem.SetActive(true);
-                break;
-            }
-        }
-    }
-
-    public void UnequipShirt(Item itemData) {
-        if (equippedShirt != null) {
-            foreach (GameObject clothesItem in clothesList) {
-                if (clothesItem.GetComponent<ItemWithAnimationData>().itemData.itemName == itemData.itemName) {
-                    equippedShirt = null;
-                    shirtAnimationScript = null;
-                    clothesItem.SetActive(false);
-                    break;
-                }
-            }
-        }
-    }*/
-
     public void SetupEquipedClothesAnimation() {
         if(equippedHat != null) {
             hatAnimationScript = equippedHat.GetComponent<ClothesAnimation>();
@@ -186,11 +140,6 @@ public class PlayerMovement : MonoBehaviour {
         if(equippedShirt != null) {
             shirtAnimationScript = equippedShirt.GetComponent<ClothesAnimation>();
         }
-    }
-
-    void EquipClothesItem() {
-        hatAnimationScript.SetMovingAnimationParamaters(animator.GetFloat("moveX"), animator.GetFloat("moveY"));
-        shirtAnimationScript.SetMovingAnimationParamaters(animator.GetFloat("moveX"), animator.GetFloat("moveY"));
     }
 
 
