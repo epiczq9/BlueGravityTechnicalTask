@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
 
+    //Well not just movement, more like PlayerBehaviour
+
+
     Rigidbody2D rb;
     Vector2 movementInput;
 
@@ -51,7 +54,7 @@ public class PlayerMovement : MonoBehaviour {
 
             isMoving = true;
 
-            rb.MovePosition(rb.position + (speed * Time.fixedDeltaTime * movementInput));
+            rb.MovePosition(rb.position + (speed * Time.fixedDeltaTime * movementInput.normalized));
 
             animator.SetBool("isMoving", isMoving);
             SetHatIsMoving();
