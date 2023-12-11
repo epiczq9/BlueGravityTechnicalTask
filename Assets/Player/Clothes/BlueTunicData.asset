@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Blue Tunic
   description: A common dress robe
+  itemType: 1
   price: 50
   isOwned: 0
+  isEquipped: 0
   icon: {fileID: 21300000, guid: d19c67f3f66af5d4799a84b6deb40f13, type: 3}

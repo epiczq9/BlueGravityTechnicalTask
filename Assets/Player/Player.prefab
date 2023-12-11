@@ -149,6 +149,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
+  canMove: 1
+  equippedHat: {fileID: 0}
+  equippedShirt: {fileID: 0}
+  hatAnimationScript: {fileID: 0}
+  shirtAnimationScript: {fileID: 0}
+  clothesList: []
 --- !u!95 &7589504523116002410
 Animator:
   serializedVersion: 4
@@ -182,4 +188,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInShopTrigger: 0
-  shopPopup: {fileID: 0}
+  shopPopupUI: {fileID: 0}
+  isShopping: 0
+  shopInteractInstruction: {fileID: 0}

@@ -14,14 +14,20 @@ public class PlayerMovement : MonoBehaviour {
     public bool canMove = true;
     bool isMoving = false;
 
+    public GameObject equippedHat;
+    public GameObject equippedShirt;
+
     public ClothesAnimation hatAnimationScript;
     public ClothesAnimation shirtAnimationScript;
+
+    public List<GameObject> clothesList = new();
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        hatAnimationScript = transform.GetChild(0).gameObject.GetComponent<ClothesAnimation>();
-        shirtAnimationScript = transform.GetChild(1).gameObject.GetComponent<ClothesAnimation>();
+        //hatAnimationScript = transform.GetChild(0).gameObject.GetComponent<ClothesAnimation>();
+        //shirtAnimationScript = transform.GetChild(1).gameObject.GetComponent<ClothesAnimation>();
+        SetupEquipedClothesAnimation();
     }
 
     private void Update() {
@@ -31,9 +37,14 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     void FixedUpdate() {
+        SetHatAnimationFloats();
+        SetShirtAnimationFloats();
 
-        hatAnimationScript.SetMovingAnimationParamaters(animator.GetFloat("moveX"), animator.GetFloat("moveY"));
-        shirtAnimationScript.SetMovingAnimationParamaters(animator.GetFloat("moveX"), animator.GetFloat("moveY"));
+        /*if (hatAnimationScript != null && shirtAnimationScript != null) {
+            hatAnimationScript.SetMovingAnimationParamaters(animator.GetFloat("moveX"), animator.GetFloat("moveY"));
+            shirtAnimationScript.SetMovingAnimationParamaters(animator.GetFloat("moveX"), animator.GetFloat("moveY"));
+
+        }*/
 
         if (canMove && movementInput != Vector2.zero) {
 
@@ -42,8 +53,10 @@ public class PlayerMovement : MonoBehaviour {
             rb.MovePosition(rb.position + (speed * Time.fixedDeltaTime * movementInput));
 
             animator.SetBool("isMoving", isMoving);
-            hatAnimationScript.SetIsMovingAnimation(isMoving);
-            shirtAnimationScript.SetIsMovingAnimation(isMoving);
+            SetHatIsMoving();
+            SetShirtIsMoving();
+            /*hatAnimationScript.SetIsMovingAnimation(isMoving);
+            shirtAnimationScript.SetIsMovingAnimation(isMoving);*/
 
 
             animator.SetFloat("moveX", movementInput.x);
@@ -54,8 +67,124 @@ public class PlayerMovement : MonoBehaviour {
         } else {
             isMoving = false;
             animator.SetBool("isMoving", isMoving);
+            SetHatIsMoving();
+            SetShirtIsMoving();
+            /*hatAnimationScript.SetIsMovingAnimation(isMoving);
+            shirtAnimationScript.SetIsMovingAnimation(isMoving);*/
+        }
+    }
+
+    void SetHatAnimationFloats() {
+        if (hatAnimationScript != null) {
+            hatAnimationScript.SetMovingAnimationParamaters(animator.GetFloat("moveX"), animator.GetFloat("moveY"));
+        }
+    }
+
+    void SetShirtAnimationFloats() {
+        if (shirtAnimationScript != null) {
+            shirtAnimationScript.SetMovingAnimationParamaters(animator.GetFloat("moveX"), animator.GetFloat("moveY"));
+        }
+    }
+
+    void SetHatIsMoving() {
+        if (hatAnimationScript != null) {
             hatAnimationScript.SetIsMovingAnimation(isMoving);
+        }
+    }
+
+    void SetShirtIsMoving() {
+        if (shirtAnimationScript != null) {
             shirtAnimationScript.SetIsMovingAnimation(isMoving);
+        }
+    }
+
+    public void EquipHatOnPlayer(GameObject itemObject) {
+        equippedHat = itemObject;
+        SetupEquipedClothesAnimation();
+    }
+
+    public void EquipShirtOnPlayer(GameObject itemObject) {
+        equippedShirt = itemObject;
+        SetupEquipedClothesAnimation();
+    }
+
+    public void UnequipHatFromPlayer() {
+        equippedHat = null;
+        hatAnimationScript = null;
+    }
+
+    public void UnequipShirtFromPlayer() {
+        equippedShirt = null;
+        shirtAnimationScript = null;
+    }
+
+
+
+    //This function is called AFTER we check if the item is already equipped in ItemInInventory script
+    /*public void EquipHat(Item itemData) {
+        if (equippedHat != null) {
+            UnequipHat(equippedHat.GetComponent<ItemWithAnimationData>().itemData);
+        }
+
+        foreach (GameObject clothesItem in clothesList) {
+            if (clothesItem.GetComponent<ItemWithAnimationData>().itemData.itemName == itemData.itemName) {
+                equippedHat = clothesItem;
+                SetupEquipedClothesAnimation();
+                clothesItem.SetActive(true);
+                break;
+            }
+
+        }
+    }
+
+    public void UnequipHat(Item itemData) {
+        if (equippedHat != null) {
+            foreach (GameObject clothesItem in clothesList) {
+                if (clothesItem.GetComponent<ItemWithAnimationData>().itemData.itemName == itemData.itemName) {
+                    equippedHat = null;
+                    hatAnimationScript = null;
+                    clothesItem.SetActive(false);
+                    break;
+                }
+            }
+        }
+    }
+
+    public void EquipShirt(Item itemData) {
+        if (equippedShirt != null) {
+            UnequipHat(equippedShirt.GetComponent<ItemWithAnimationData>().itemData);
+        }
+
+        foreach (GameObject clothesItem in clothesList) {
+            if (clothesItem.GetComponent<ItemWithAnimationData>().itemData.itemName == itemData.itemName) {
+                equippedShirt = clothesItem;
+                SetupEquipedClothesAnimation();
+                clothesItem.SetActive(true);
+                break;
+            }
+        }
+    }
+
+    public void UnequipShirt(Item itemData) {
+        if (equippedShirt != null) {
+            foreach (GameObject clothesItem in clothesList) {
+                if (clothesItem.GetComponent<ItemWithAnimationData>().itemData.itemName == itemData.itemName) {
+                    equippedShirt = null;
+                    shirtAnimationScript = null;
+                    clothesItem.SetActive(false);
+                    break;
+                }
+            }
+        }
+    }*/
+
+    public void SetupEquipedClothesAnimation() {
+        if(equippedHat != null) {
+            hatAnimationScript = equippedHat.GetComponent<ClothesAnimation>();
+        }
+        
+        if(equippedShirt != null) {
+            shirtAnimationScript = equippedShirt.GetComponent<ClothesAnimation>();
         }
     }
 
