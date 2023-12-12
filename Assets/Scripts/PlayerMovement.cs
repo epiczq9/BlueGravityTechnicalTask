@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour {
     void Start() {
 
         //The idea of this function is to equip clothes on startup that were still equipped when the player exited the game
-        //but I was thinking it's better to reset everything, but I will leabe this here, if I wanted to save the progress
+        //but I was thinking it's better to reset everything, but I will leave this here, if I wanted to save the progress
 
         //CheckEquippedClothes();
 
@@ -74,7 +74,7 @@ public class PlayerMovement : MonoBehaviour {
 
 
     //The idea of this function is to equip clothes that were equipped when the player exited the game
-    //but I was thinking it's better to reset everything, but I will leabe this here, if I wanted to save the progress
+    //but I was thinking it's better to reset everything, but I will leave this here, if I wanted to save the progress
     void CheckEquippedClothes() {
         foreach(GameObject clothesItem in clothesList) {
             Item clothesData = clothesItem.GetComponent<ItemWithAnimationData>().itemData;
